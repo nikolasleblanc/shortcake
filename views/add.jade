@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    h1= title
+    form#formAddLink(name="add",method="post",action="/addLink")
+        input#inputLongLink(type="text", placeholder="Actual URL", name="longLink")
+        input#inputShortLink(type="text", placeholder="Shortened URL", name="shortLink")
+        button#btnSubmit(type="submit") submit

@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    h1.
+        Links
+    ul
+        each link, i in links
+            li
+                a(href="#{link.long}")= link.short
