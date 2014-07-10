@@ -3,7 +3,9 @@ extends layout
 block content
     h1.
         Links
+    p
+        a(href="add") Add link
     ul
         each link, i in links
             li
-                a(href="#{link.long}")= link.short
+                a(href="#{link.short}")= link.long

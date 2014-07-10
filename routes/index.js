@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
+var randtoken = require('rand-token');
 
 /* GET home page. */
 router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
 });
+
 
 router.get('/helloworld', function(req, res) {
     res.render('helloworld', { title: 'Hello, World!' })
@@ -14,9 +16,10 @@ router.get('/links', function(req, res) {
     var db = req.db;
     var collection = db.get('links');
     collection.find({},{},function(e,docs){
-        res.json('links', {
-            "links" : docs
-        });
+	res.render('links', { 
+		title: 'Links',
+		links : docs
+	});
     });
 });
 
@@ -41,7 +44,7 @@ router.post('/addLink', function(req, res) {
     var db = req.db;
 
     // Get our form values. These rely on the "name" attributes
-    var shortLink = req.body.shortLink;
+    var shortLink = randtoken.generate(5);
     var longLink = req.body.longLink;
 
     // Set our collection
@@ -63,6 +66,18 @@ router.post('/addLink', function(req, res) {
             res.redirect("links");
         }
     });
+});
+
+router.get('/:shortLink', function(req, res) {
+	var db = req.db;
+    var collection = db.get('links');
+    collection.findOne({"short":req.params.shortLink},{},function(e,docs){
+        if (e)
+                res.send(e)
+        res.location(docs.long);
+        res.redirect(docs.long);
+    });
+
 });
 
 module.exports = router;
